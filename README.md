@@ -48,22 +48,21 @@
 - **リソースグループ**: `rg-azmeows-dev`
 - **Cosmos DB アカウント**: `cosno-event-childcare-dev`
 
-### Cosmos DB のデータ構造
+### Cosmos DB `cosno-event-childcare-dev` のデータ構造
 
-- **Cosmos DB アカウント**: `cosno-event-childcare-dev`
-  - **データベース**: `cosmos-event-childcare-dev`
-    - **コレクション**:
-      - `received-emails`: 受信したメールの情報を格納
-      - `vendor-comparisons`: 業者比較に関する情報を格納
+- **データベース**: `cosmos-event-childcare-dev`
+- **コレクション**:
+  - `received-emails`: 受信したメールの情報を格納
+  - `vendor-comparisons`: 業者比較に関する情報を格納
 
 #### `received-emails` コレクション
 
 受信したメールの情報を格納する。Change feedを利用して、受信メールが格納された契機をトリガーに、業者比較用の情報抽出などの処理を実装する。
 
-- partition key: `/userEMailAddress`
+- **partition key**: `/userEMailAddress`
 
 #### `vendor-comparisons` コレクション
 
 業者比較に関する情報を格納する
 
-- partition key: `/userEMailAddress`
+- **partition key**: `/userEMailAddress`
