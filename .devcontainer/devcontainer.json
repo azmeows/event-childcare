@@ -11,8 +11,10 @@
         "ms-azuretools.vscode-azurefunctions",
         "ms-azuretools.vscode-azureresourcegroups",
         "ms-azuretools.vscode-cosmosdb",
-        "ms-azuretools.vscode-bicep"
+        "ms-azuretools.vscode-bicep",
+        "ms-dotnettools.csharp"
       ]
     }
-  }
+  },
+  "postCreateCommand": "npm install -g azure-functions-core-tools@4 --unsafe-perm true"
 }
