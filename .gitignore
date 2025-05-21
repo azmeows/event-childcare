@@ -1,3 +1,4 @@
 # Azurite artifacts
 __azurite_*
 .azurite/
+AzuriteConfig
