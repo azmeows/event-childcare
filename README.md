@@ -65,7 +65,9 @@
    ```
 
 3. **Azurite の状態確認**
-   - 画面下部の出力パネルで「Azurite Blob」「Azurite Queue」などを選択すると、それぞれのサービスのログが表示されます
+   - 左サイドバーの「Local Emulator」からサービスの状態を確認できます
+   - 画面下部の出力パネルで「Azurite Blob Service」「Azurite Queue Service」「Azurite Table Service」を選択すると、それぞれのサービスが起動します
+   - VS CodeのOutputパネルでそれぞれのサービスを選択してログを表示できます
    - デフォルトでは Blob サービスはポート 10000、Queue サービスはポート 10001、Table サービスはポート 10002 で動作します
    - 画面右下のステータスバーには起動中のサービス（例：[Azurite Queue Service] [Azurite Blob Service]）が表示されます
 
