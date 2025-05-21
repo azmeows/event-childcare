@@ -19,6 +19,7 @@
   - Azure Cosmos DB
   - Bicep
   - C#
+  - Azurite
 
 ### セットアップ手順
 
@@ -41,6 +42,37 @@
 
 - Dev Container の設定は `.devcontainer/devcontainer.json` に記載されています。
 - Azure 関連の開発やデプロイがすぐに始められる環境です。
+
+### Azurite の利用方法
+
+[Azurite](https://learn.microsoft.com/ja-jp/azure/storage/common/storage-use-azurite) は Azure Storage エミュレーターで、ローカル環境で Azure Functions や Cosmos DB トリガーのテストを行うために利用できます。
+
+1. **Azurite の起動**
+   - VS Code の左側のアクティビティバーで Azure アイコンをクリックします
+   - 「Attached Storage Accounts」を展開します
+   - 「Local Emulator」を展開します
+   - 「Blob Containers」セクションの中の「Start Blob Emulator」をクリックしてBlobサービスを起動します
+   - 必要に応じて「Queues」や「Tables」も同様に起動できます
+
+2. **Azure Functions でのローカル開発**
+   - `local.settings.json` に以下の設定を追加します:
+   ```json
+   {
+     "Values": {
+       "AzureWebJobsStorage": "UseDevelopmentStorage=true"
+     }
+   }
+   ```
+
+3. **Azurite の状態確認**
+   - 左サイドバーの「Local Emulator」からサービスの状態を確認できます
+   - 画面下部の出力パネルで「Azurite Blob Service」「Azurite Queue Service」「Azurite Table Service」を選択すると、それぞれのサービスが起動します
+   - VS CodeのOutputパネルでそれぞれのサービスを選択してログを表示できます
+   - デフォルトでは Blob サービスはポート 10000、Queue サービスはポート 10001、Table サービスはポート 10002 で動作します
+   - 画面右下のステータスバーには起動中のサービス（例：[Azurite Queue Service] [Azurite Blob Service]）が表示されます
+
+4. **Azurite の停止**
+   - 画面右下のステータスバーに表示されているサービス名をクリックすると停止できます
 
 ---
 
