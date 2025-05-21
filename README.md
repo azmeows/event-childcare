@@ -48,8 +48,11 @@
 [Azurite](https://learn.microsoft.com/ja-jp/azure/storage/common/storage-use-azurite) は Azure Storage エミュレーターで、ローカル環境で Azure Functions や Cosmos DB トリガーのテストを行うために利用できます。
 
 1. **Azurite の起動**
-   - VS Code の左側のアクティビティバーで Azurite アイコンをクリックします
-   - 「Start Azurite Blob Service」「Start Azurite Queue Service」「Start Azurite Table Service」をクリックして各サービスを起動します
+   - VS Code の左側のアクティビティバーで Azure アイコンをクリックします
+   - 「Attached Storage Accounts」を展開します
+   - 「Local Emulator」を展開します
+   - 「Blob Containers」セクションの中の「Start Blob Emulator」をクリックしてBlobサービスを起動します
+   - 必要に応じて「Queues」や「Tables」も同様に起動できます
 
 2. **Azure Functions でのローカル開発**
    - `local.settings.json` に以下の設定を追加します:
@@ -62,11 +65,12 @@
    ```
 
 3. **Azurite の状態確認**
-   - VS Code の出力パネルで「Azurite」を選択すると、ログが表示されます
+   - 画面下部の出力パネルで「Azurite Blob」「Azurite Queue」などを選択すると、それぞれのサービスのログが表示されます
    - デフォルトでは Blob サービスはポート 10000、Queue サービスはポート 10001、Table サービスはポート 10002 で動作します
+   - 画面右下のステータスバーには起動中のサービス（例：[Azurite Queue Service] [Azurite Blob Service]）が表示されます
 
 4. **Azurite の停止**
-   - VS Code の Azurite パネルで、停止したいサービスの「Stop」ボタンをクリックします
+   - 画面右下のステータスバーに表示されているサービス名をクリックすると停止できます
 
 ---
 
