@@ -12,7 +12,6 @@
   - Azure CLI
   - Azure Developer CLI (`azd`)
   - Azure Functions Core Tools (v4)
-  - Azurite (Azure Storage エミュレーター)
 - **VS Code 拡張機能**
   - Azure GitHub Copilot
   - Azure Functions
@@ -35,7 +34,6 @@
    - 必要なツール・拡張機能が自動でインストールされます。
    - ターミナルで `az --version` や `azd version` でインストール確認ができます。
    - Azure Functions Core Tools は `func --version` で確認できます。
-   - Azurite は `azurite --version` で確認できます。
 
 4. **Azure へのサインイン**
    - ターミナルで `az login` および `azd auth login` を実行し、Azure アカウントにサインインしてください。
@@ -50,10 +48,8 @@
 [Azurite](https://learn.microsoft.com/ja-jp/azure/storage/common/storage-use-azurite) は Azure Storage エミュレーターで、ローカル環境で Azure Functions や Cosmos DB トリガーのテストを行うために利用できます。
 
 1. **Azurite の起動**
-   ```bash
-   # Azurite を起動（バックグラウンド実行）
-   azurite --silent &
-   ```
+   - VS Code の左側のアクティビティバーで Azurite アイコンをクリックします
+   - 「Start Azurite Blob Service」「Start Azurite Queue Service」「Start Azurite Table Service」をクリックして各サービスを起動します
 
 2. **Azure Functions でのローカル開発**
    - `local.settings.json` に以下の設定を追加します:
@@ -66,16 +62,11 @@
    ```
 
 3. **Azurite の状態確認**
-   ```bash
-   # Azurite のプロセスが実行中か確認
-   ps aux | grep azurite
-   ```
+   - VS Code の出力パネルで「Azurite」を選択すると、ログが表示されます
+   - デフォルトでは Blob サービスはポート 10000、Queue サービスはポート 10001、Table サービスはポート 10002 で動作します
 
 4. **Azurite の停止**
-   ```bash
-   # Azurite プロセスの停止
-   pkill -f azurite
-   ```
+   - VS Code の Azurite パネルで、停止したいサービスの「Stop」ボタンをクリックします
 
 ---
 
