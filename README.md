@@ -11,12 +11,14 @@
 - **インストール済みツール**
   - Azure CLI
   - Azure Developer CLI (`azd`)
+  - Azure Functions Core Tools (v4)
 - **VS Code 拡張機能**
   - Azure GitHub Copilot
   - Azure Functions
   - Azure Resource Groups
   - Azure Cosmos DB
   - Bicep
+  - C#
 
 ### セットアップ手順
 
@@ -30,6 +32,7 @@
 3. **初回起動時の処理**
    - 必要なツール・拡張機能が自動でインストールされます。
    - ターミナルで `az --version` や `azd version` でインストール確認ができます。
+   - Azure Functions Core Tools は `func --version` で確認できます。
 
 4. **Azure へのサインイン**
    - ターミナルで `az login` および `azd auth login` を実行し、Azure アカウントにサインインしてください。
