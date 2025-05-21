@@ -45,8 +45,15 @@
 
 ## Azureのリソース構成
 
-- **リソースグループ**: `rg-azmeows-dev`
-- **Cosmos DB アカウント**: `cosno-event-childcare-dev`
+| リソースの種類 | リソース名 | 用途 |
+|--------------|-----------|------|
+| リソースグループ | `rg-azmeows-dev` | 関連リソースの管理 |
+| Cosmos DB アカウント | `cosno-event-childcare-dev` | データ格納 |
+| Application Insights | `appi-event-childcare-dev` | Azure Functionsのアプリケーションログ |
+| Log Analytics Workspace | `log-event-childcare-dev` | Azure Functionsの診断ログ |
+| Azure Functions | `func-event-childcare-dev` | Cosmos DBのChange feedを受け付ける |
+| Storage account | `stfunceventchildcaredev` | Azure Functionsに紐づくストレージ |
+| Azure OpenAI Service | `oai-event-childcare-dev` | Azure Functionsから利用される |
 
 ### Cosmos DB `cosno-event-childcare-dev` のデータ構造
 
