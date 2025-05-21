@@ -12,6 +12,7 @@
   - Azure CLI
   - Azure Developer CLI (`azd`)
   - Azure Functions Core Tools (v4)
+  - Azurite (Azure Storage エミュレーター)
 - **VS Code 拡張機能**
   - Azure GitHub Copilot
   - Azure Functions
@@ -19,6 +20,7 @@
   - Azure Cosmos DB
   - Bicep
   - C#
+  - Azurite
 
 ### セットアップ手順
 
@@ -33,6 +35,7 @@
    - 必要なツール・拡張機能が自動でインストールされます。
    - ターミナルで `az --version` や `azd version` でインストール確認ができます。
    - Azure Functions Core Tools は `func --version` で確認できます。
+   - Azurite は `azurite --version` で確認できます。
 
 4. **Azure へのサインイン**
    - ターミナルで `az login` および `azd auth login` を実行し、Azure アカウントにサインインしてください。
@@ -41,6 +44,38 @@
 
 - Dev Container の設定は `.devcontainer/devcontainer.json` に記載されています。
 - Azure 関連の開発やデプロイがすぐに始められる環境です。
+
+### Azurite の利用方法
+
+[Azurite](https://learn.microsoft.com/ja-jp/azure/storage/common/storage-use-azurite) は Azure Storage エミュレーターで、ローカル環境で Azure Functions や Cosmos DB トリガーのテストを行うために利用できます。
+
+1. **Azurite の起動**
+   ```bash
+   # Azurite を起動（バックグラウンド実行）
+   azurite --silent &
+   ```
+
+2. **Azure Functions でのローカル開発**
+   - `local.settings.json` に以下の設定を追加します:
+   ```json
+   {
+     "Values": {
+       "AzureWebJobsStorage": "UseDevelopmentStorage=true"
+     }
+   }
+   ```
+
+3. **Azurite の状態確認**
+   ```bash
+   # Azurite のプロセスが実行中か確認
+   ps aux | grep azurite
+   ```
+
+4. **Azurite の停止**
+   ```bash
+   # Azurite プロセスの停止
+   pkill -f azurite
+   ```
 
 ---
 
