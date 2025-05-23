@@ -4,6 +4,8 @@ using Microsoft.Extensions.Logging;
 using MailAnalyzeFunction.Models;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
+
 
 namespace MailAnalyzeFunction.Services
 {
@@ -117,6 +119,46 @@ namespace MailAnalyzeFunction.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex, $"Failed to upsert document with ID: {document.Id}");
+                throw;
+            }
+        }
+
+        public async Task<VendorComparisonDocument?> GetLatestDocumentByUserEmailAsync(string userEmailAddress)
+        {
+            try
+            {
+                _logger.LogInformation($"Retrieving latest document for user: {userEmailAddress}");
+
+                var query = new QueryDefinition(
+                    "SELECT * FROM c WHERE c.userEMailAddress = @userEmailAddress ORDER BY c._ts DESC OFFSET 0 LIMIT 1")
+                    .WithParameter("@userEmailAddress", userEmailAddress);
+
+                var iterator = _container.GetItemQueryIterator<VendorComparisonDocument>(
+                    query,
+                    requestOptions: new QueryRequestOptions
+                    {
+                        PartitionKey = new PartitionKey(userEmailAddress),
+                        MaxItemCount = 1
+                    });
+
+                if (iterator.HasMoreResults)
+                {
+                    var response = await iterator.ReadNextAsync();
+                    var document = response.FirstOrDefault();
+                    
+                    if (document != null)
+                    {
+                        _logger.LogInformation($"Found existing document with ID: {document.Id}");
+                        return document;
+                    }
+                }
+
+                _logger.LogInformation($"No existing document found for user: {userEmailAddress}");
+                return null;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"Failed to retrieve document for user: {userEmailAddress}");
                 throw;
             }
         }

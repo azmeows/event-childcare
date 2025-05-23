@@ -54,6 +54,11 @@ namespace MailAnalyzeFunction.Models
 
         [JsonProperty("vendors")]
         public List<Vendor> VendorList { get; set; } = new List<Vendor>();
+
+
+        [JsonProperty("vendorComparisonResult")]
+        public string VendorComparisonResult { get; set; } = string.Empty;
+
     }
 
     public class Vendor
