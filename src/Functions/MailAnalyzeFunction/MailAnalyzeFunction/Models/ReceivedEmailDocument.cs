@@ -48,12 +48,12 @@ namespace MailAnalyzeFunction.Models
         [JsonProperty("userEMailAddress")]
         public string UserEmailAddress { get; set; } = string.Empty;
 
-        [JsonProperty("vendorAnalysisList")]
-        public List<Vendor> VendorList { get; set; } = new List<Vendor>();
-
-        // パーティションキー用プロパティを明示的に追加
-        [JsonProperty("partitionKey")]
+        // Cosmos DB パーティションキー用のプロパティ（書き込み専用）
+        [JsonIgnore]
         public string PartitionKey => UserEmailAddress;
+
+        [JsonProperty("vendors")]
+        public List<Vendor> VendorList { get; set; } = new List<Vendor>();
     }
 
     public class Vendor

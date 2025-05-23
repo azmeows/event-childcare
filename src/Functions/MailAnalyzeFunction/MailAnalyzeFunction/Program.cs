@@ -11,7 +11,9 @@ var host = new HostBuilder()
         services.ConfigureFunctionsApplicationInsights();
         // Azure OpenAI分析サービスの登録
         services.AddSingleton<EmailContentAnalyzer>();
-            })
+        // Cosmos DB サービスの登録
+        services.AddSingleton<CosmosDbService>();
+    })
     .Build();
 
 host.Run();
