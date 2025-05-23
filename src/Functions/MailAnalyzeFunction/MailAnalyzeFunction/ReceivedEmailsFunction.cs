@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Functions.Worker.Extensions.CosmosDB;
 using MailAnalyzeFunction.Models;
 
+
 namespace MailAnalyzeFunction
 {
     public class ReceivedEmailsFunction
@@ -45,4 +46,5 @@ namespace MailAnalyzeFunction
             }
         }
     }
+
 }
