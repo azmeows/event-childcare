@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using MailAnalyzeFunction.Models;
 using MailAnalyzeFunction.Services;
 using Microsoft.Azure.Functions.Worker;
@@ -28,19 +29,26 @@ namespace MailAnalyzeFunction
 
         [Function("ReceivedEmailsFunction")]
         public async Task Run([CosmosDBTrigger(
-            databaseName: "%CosmosDb:Database%",
-            containerName: "%CosmosDb:ReceivedEmailsContainer%",
-            Connection = "CosmosDb:ConnectionString",
+            databaseName: "%COSMOSDB_DATABASE%",
+            containerName: "%COSMOSDB_CONTAINER%",
+            Connection = "COSMOSDB_CONNECTION_STRING",
             LeaseContainerName = "leases",
-            CreateLeaseContainerIfNotExists = true)] IReadOnlyList<ReceivedEmailDocument> input)
+            CreateLeaseContainerIfNotExists = true,
+            FeedPollDelay = 1000,  // ポーリング間隔を1秒に短縮
+            MaxItemsPerInvocation = 100,  // バッチサイズを調整
+            StartFromBeginning = false
+            )] IReadOnlyList<ReceivedEmail> input,
+            FunctionContext context)
         {
-            if (input != null && input.Count > 0)
+            if (input is not null && input.Any())
             {
-                _logger.LogInformation($"受信メール数: {input.Count}");
+                _logger.LogInformation("Processing {Count} documents at {Timestamp}", 
+                    input.Count, DateTime.UtcNow);
                 
                 foreach (var document in input)
                 {
-                    _logger.LogInformation($"メールID: {document.Id}, ユーザーメールアドレス: {document.UserEmailAddress}");
+                    _logger.LogInformation("ReceivedEmail: {Id}, UserEmail: {userEmail}, ProcessedAt: {ProcessedAt}", 
+                        document.Id, document.UserEMailAddress, DateTime.UtcNow);
                     
                     // 各託児サービス業者のメールを処理
                     foreach (var service in document.ChildCareServices)
@@ -55,7 +63,7 @@ namespace MailAnalyzeFunction
                             // 分析結果をCosmosDBに保存
                             var comparisonDocument = new VendorComparisonDocument
                             {
-                                UserEmailAddress = document.UserEmailAddress,
+                                UserEmailAddress = document.UserEMailAddress,
                                 SourceEmailId = document.Id,
                                 VendorEmail = service.MailAddress,
                                 AnalysisResults = analysisResults,
@@ -73,6 +81,8 @@ namespace MailAnalyzeFunction
                         }
                     }
                 }
+                
+                _logger.LogInformation("Completed processing {Count} documents", input.Count);
             }
         }
     }
