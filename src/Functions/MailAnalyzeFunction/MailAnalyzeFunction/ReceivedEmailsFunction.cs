@@ -155,11 +155,11 @@ namespace MailAnalyzeFunction
             sanitized = Regex.Replace(sanitized, @"\s+", " ");
 
             // 長すぎる文字列を制限（Cosmos DBの制限を考慮）
-            if (sanitized.Length > 2000)
-            {
-                sanitized = sanitized.Substring(0, 2000) + "...";
-                _logger.LogWarning($"String truncated to 2000 characters");
-            }
+            //if (sanitized.Length > 2000)
+            //{
+            //    sanitized = sanitized.Substring(0, 2000) + "...";
+            //    _logger.LogWarning($"String truncated to 2000 characters");
+            //}
 
             return sanitized.Trim();
         }
