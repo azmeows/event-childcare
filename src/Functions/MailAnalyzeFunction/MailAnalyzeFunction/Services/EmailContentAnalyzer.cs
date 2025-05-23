@@ -123,6 +123,7 @@ namespace MailAnalyzeFunction.Services
             }
         }
 
+
         /// <summary>
         /// 複数の業者を比較して、メリット・デメリット・選び方のポイントを分析
         /// </summary>
@@ -255,5 +256,6 @@ namespace MailAnalyzeFunction.Services
                 return "複数業者の比較分析中にエラーが発生しました。";
             }
         }
+
     }
 }

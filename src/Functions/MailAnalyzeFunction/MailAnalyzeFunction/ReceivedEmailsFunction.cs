@@ -57,6 +57,7 @@ namespace MailAnalyzeFunction
                     logger.LogError("User email address is null or empty");
                     throw new ArgumentException("User email address is required");
                 }
+
                 var sanitizedUserEmail = SanitizeString(userEmailAddress);
 
                 // 既存のドキュメントを確認
@@ -84,6 +85,7 @@ namespace MailAnalyzeFunction
 
                 foreach (var document in input)
                 {
+
                     if (document?.ChildCareServices == null) continue;
 
                     foreach (ChildCareService service in document.ChildCareServices)
@@ -99,6 +101,7 @@ namespace MailAnalyzeFunction
 
                             var sanitizedMailAddress = SanitizeString(service.MailAddress);
                             var sanitizedMailText = SanitizeString(service.MailText ?? string.Empty);
+
 
                             logger.LogInformation($"業者メールアドレス: {sanitizedMailAddress}, 受信日時: {service.MailReceiveTime}");                            // メール本文を分析
                             var analysisResult = await _emailAnalyzer.AnalyzeEmailContentAsync(sanitizedMailText);
@@ -125,12 +128,14 @@ namespace MailAnalyzeFunction
                                 });
                                 logger.LogInformation($"Added new vendor: {sanitizedMailAddress}");
                             }
+
                         }
                         catch (Exception ex)
                         {
                             logger.LogError(ex, $"Error processing service {service.MailAddress}");
                             // 個別のサービス処理エラーは継続
                         }
+
                     }                }
                 logger.LogInformation($"Successfully processed documents, total vendors: {vendorComparisonDocument.VendorList.Count}");
 
@@ -170,6 +175,7 @@ namespace MailAnalyzeFunction
                     throw;
                 }
                 
+
             }
             catch (Exception ex)
             {
