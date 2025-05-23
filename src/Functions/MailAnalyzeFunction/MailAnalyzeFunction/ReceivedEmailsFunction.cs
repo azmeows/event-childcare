@@ -56,19 +56,30 @@ namespace MailAnalyzeFunction
                 {
                     logger.LogError("User email address is null or empty");
                     throw new ArgumentException("User email address is required");
-                }
+                }                var sanitizedUserEmail = SanitizeString(userEmailAddress);
 
-                var sanitizedUserEmail = SanitizeString(userEmailAddress);
-
-                // ユニークなIDを生成（タイムスタンプを含む）
-                var uniqueId = $"{Guid.NewGuid():N}_{DateTime.UtcNow:yyyyMMddHHmmss}";
-
-                var vendorComparisonDocument = new VendorComparisonDocument
+                // 既存のドキュメントを確認
+                var existingDocument = await _cosmosDbService.GetLatestDocumentByUserEmailAsync(sanitizedUserEmail);
+                
+                VendorComparisonDocument vendorComparisonDocument;
+                if (existingDocument != null)
                 {
-                    Id = uniqueId,
-                    UserEmailAddress = sanitizedUserEmail
-                    // PartitionKeyはUserEmailAddressを返す計算プロパティとして定義されているため、明示的な設定は不要
-                };
+                    // 既存のドキュメントがある場合はそれを使用
+                    vendorComparisonDocument = existingDocument;
+                    logger.LogInformation($"Using existing document with ID: {existingDocument.Id}");
+                }
+                else
+                {
+                    // 新しいドキュメントを作成
+                    var uniqueId = $"{Guid.NewGuid():N}_{DateTime.UtcNow:yyyyMMddHHmmss}";
+                    vendorComparisonDocument = new VendorComparisonDocument
+                    {
+                        Id = uniqueId,
+                        UserEmailAddress = sanitizedUserEmail
+                        // PartitionKeyはUserEmailAddressを返す計算プロパティとして定義されているため、明示的な設定は不要
+                    };
+                    logger.LogInformation($"Creating new document with ID: {uniqueId}");
+                }
 
                 foreach (var document in input)
                 {
@@ -88,17 +99,31 @@ namespace MailAnalyzeFunction
                             var sanitizedMailAddress = SanitizeString(service.MailAddress);
                             var sanitizedMailText = SanitizeString(service.MailText ?? string.Empty);
 
-                            logger.LogInformation($"業者メールアドレス: {sanitizedMailAddress}, 受信日時: {service.MailReceiveTime}");
-
-                            // メール本文を分析
+                            logger.LogInformation($"業者メールアドレス: {sanitizedMailAddress}, 受信日時: {service.MailReceiveTime}");                            // メール本文を分析
                             var analysisResult = await _emailAnalyzer.AnalyzeEmailContentAsync(sanitizedMailText);
-                            // 分析結果を業者比較ドキュメントに追加
-                            vendorComparisonDocument.VendorList.Add(new Vendor
+                            
+                            // 既存のベンダーリストに同じメールアドレスが存在するかチェック
+                            var existingVendor = vendorComparisonDocument.VendorList
+                                .FirstOrDefault(v => v.VendorEmail.Equals(sanitizedMailAddress, StringComparison.OrdinalIgnoreCase));
+                            
+                            if (existingVendor != null)
                             {
-                                VendorEmail = sanitizedMailAddress,
-                                AnalysisResult = analysisResult,
-                                AnalyzedTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"))
-                            });
+                                // 既存のベンダー情報を更新
+                                existingVendor.AnalysisResult = analysisResult;
+                                existingVendor.AnalyzedTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"));
+                                logger.LogInformation($"Updated existing vendor: {sanitizedMailAddress}");
+                            }
+                            else
+                            {
+                                // 新しいベンダーを追加
+                                vendorComparisonDocument.VendorList.Add(new Vendor
+                                {
+                                    VendorEmail = sanitizedMailAddress,
+                                    AnalysisResult = analysisResult,
+                                    AnalyzedTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, TimeZoneInfo.FindSystemTimeZoneById("Tokyo Standard Time"))
+                                });
+                                logger.LogInformation($"Added new vendor: {sanitizedMailAddress}");
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -106,26 +131,13 @@ namespace MailAnalyzeFunction
                             // 個別のサービス処理エラーは継続
                         }
                     }
-                }
+                }                logger.LogInformation($"Successfully processed documents, total vendors: {vendorComparisonDocument.VendorList.Count}");
 
-                logger.LogInformation($"Successfully processed documents, creating {vendorComparisonDocument.VendorList.Count} vendors");
-
-                // デバッグ用: 返すデータの構造をログに出力
+                // Cosmos DB SDK を使用してドキュメントを更新または作成
                 try
                 {
-                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(vendorComparisonDocument, Newtonsoft.Json.Formatting.Indented);
-                    logger.LogInformation($"Serialized document: {json}");
-                }
-                catch (Exception serializationEx)
-                {
-                    logger.LogError(serializationEx, "Error serializing document for logging");
-                }
-
-                // Cosmos DB SDK を使用してドキュメントを作成
-                try
-                {
-                    var createdDocument = await _cosmosDbService.UpsertDocumentAsync(vendorComparisonDocument);
-                    logger.LogInformation($"Document successfully saved to Cosmos DB with ID: {createdDocument.Id}");
+                    var savedDocument = await _cosmosDbService.UpsertDocumentAsync(vendorComparisonDocument);
+                    logger.LogInformation($"Document successfully saved to Cosmos DB with ID: {savedDocument.Id}, Total vendors: {savedDocument.VendorList.Count}");
                 }
                 catch (Exception cosmosEx)
                 {
