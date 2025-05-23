@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>業者比較 - イベント託児サービス管理システム</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>イベント託児サービス管理システム</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="received-emails.html">受信メール</a></li>
+                <li><a href="vendor-comparisons.html" class="active">業者比較</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="comparison-controls">
+            <h2>業者比較</h2>
+            
+            <div class="filters">
+                <input type="text" id="search-vendor" placeholder="業者を検索...">
+                <select id="filter-comparison">
+                    <option value="all">すべての比較</option>
+                    <option value="price">価格で並び替え</option>
+                    <option value="rating">評価で並び替え</option>
+                </select>
+            </div>
+        </section>
+        
+        <section class="comparison-table-container">
+            <table class="comparison-table" id="vendor-comparison-table">
+                <thead>
+                    <tr>
+                        <th>業者名</th>
+                        <th>提供サービス</th>
+                        <th>価格</th>
+                        <th>評価</th>
+                        <th>連絡先</th>
+                        <th>アクション</th>
+                    </tr>
+                </thead>
+                <tbody id="vendor-comparison-body">
+                    <tr>
+                        <td colspan="6" class="loading">データをロード中...</td>
+                    </tr>
+                    <!-- 業者比較データがここに動的に表示されます -->
+                </tbody>
+            </table>
+        </section>
+        
+        <section class="comparison-details" id="comparison-details">
+            <h3>詳細情報</h3>
+            <div id="vendor-details">
+                <p>表から業者を選択して詳細を表示してください</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 イベント託児サービス管理システム</p>
+    </footer>
+
+    <script src="static/js/app.js"></script>
+    <script src="static/js/vendors.js"></script>
+</body>
+</html>

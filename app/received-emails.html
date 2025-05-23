@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>受信メール - イベント託児サービス管理システム</title>
+    <link rel="stylesheet" href="static/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>イベント託児サービス管理システム</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="received-emails.html" class="active">受信メール</a></li>
+                <li><a href="vendor-comparisons.html">業者比較</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="emails-list">
+            <h2>受信メール一覧</h2>
+            
+            <div class="filters">
+                <input type="text" id="search-email" placeholder="メールを検索...">
+                <select id="filter-email">
+                    <option value="all">すべて表示</option>
+                    <option value="unread">未読</option>
+                    <option value="read">既読</option>
+                </select>
+            </div>
+            
+            <div class="email-container" id="email-list">
+                <p class="loading">データをロード中...</p>
+                <!-- 受信メールがここに動的に表示されます -->
+            </div>
+            
+            <div class="pagination">
+                <button id="prev-page" disabled>前へ</button>
+                <span id="page-info">ページ 1</span>
+                <button id="next-page">次へ</button>
+            </div>
+        </section>
+        
+        <section class="email-detail" id="email-detail">
+            <h2>メール詳細</h2>
+            <div id="email-content">
+                <p>左側のリストからメールを選択してください</p>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2023 イベント託児サービス管理システム</p>
+    </footer>
+
+    <script src="static/js/app.js"></script>
+    <script src="static/js/emails.js"></script>
+</body>
+</html>
