@@ -3,3 +3,7 @@ __azurite_*
 .azurite/
 AzuriteConfig
 /src/Functions/MailAnalyzeFunction/.vs
+/src/Functions/MailAnalyzeFunction/MailAnalyzeFunction/Properties/PublishProfiles/func-event-childcare-dev - Zip Deploy.pubxml
+/src/Functions/MailAnalyzeFunction/MailAnalyzeFunction/Properties/ServiceDependencies/func-event-childcare-dev - Zip Deploy/appInsights1.arm.json
+/src/Functions/MailAnalyzeFunction/MailAnalyzeFunction/Properties/ServiceDependencies/func-event-childcare-dev - Zip Deploy/storage1.arm.json
+/src/Functions/MailAnalyzeFunction/MailAnalyzeFunction/Properties/serviceDependencies.func-event-childcare-dev - Zip Deploy.json
