@@ -7,6 +7,19 @@
                 "excludedTypes": "Request"
             },
             "enableLiveMetricsFilters": true
+        },
+        "logLevel": {
+            "Host.Triggers.CosmosDB": "Information"
         }
-    }
+    },
+    "extensions": {
+        "cosmosDB": {
+            "connectionMode": "Direct",
+            "protocol": "Tcp",
+            "leaseOptions": {
+                "leasePrefix": "mailanalyze"
+            }
+        }
+    },
+    "functionTimeout": "00:05:00"
 }
