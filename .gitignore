@@ -2,3 +2,4 @@
 __azurite_*
 .azurite/
 AzuriteConfig
+/src/Functions/MailAnalyzeFunction/.vs
