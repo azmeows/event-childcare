@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36119.2 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MailAnalyzeFunction", "MailAnalyzeFunction\MailAnalyzeFunction.csproj", "{5FE2F066-7005-4287-AD7D-B1FD96932ADA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5FE2F066-7005-4287-AD7D-B1FD96932ADA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FE2F066-7005-4287-AD7D-B1FD96932ADA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FE2F066-7005-4287-AD7D-B1FD96932ADA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FE2F066-7005-4287-AD7D-B1FD96932ADA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {299344FD-BBFC-47B4-81D9-551AE4A623A6}
+	EndGlobalSection
+EndGlobal
