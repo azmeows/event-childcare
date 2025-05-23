@@ -13,7 +13,7 @@
 
 ### 1. 環境変数の設定 (Environment Variables Setup)
 
-1. `src/Functions/MailAnalyzeFunction/MailAnalyzeFunction/local.settings.json.example` を `local.settings.json` にコピーします。
+1. `src/Functions/VendorComparisonFunction/VendorComparisonFunction/local.settings.json.example` を `local.settings.json` にコピーします。
 2. 以下の項目を適切な値に更新します：
 
 ```json
@@ -24,7 +24,6 @@
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "COSMOSDB_CONNECTION_STRING": "Your_Cosmos_DB_Connection_String", // Cosmos DBの接続文字列
     "COSMOSDB_DATABASE": "cosmos-event-childcare-dev", // データベース名
-    "COSMOSDB_CONTAINER": "received-emails", // 受信メールコンテナ
     "COSMOSDB_CONTAINER_VENDOR_COMPARISONS": "vendor-comparisons" // 業者比較コンテナ
   }
 }
@@ -77,7 +76,7 @@ APIの動作確認用にテストデータを作成します：
 
 1. プロジェクトディレクトリに移動します：
    ```
-   cd src/Functions/MailAnalyzeFunction
+   cd src/Functions/VendorComparisonFunction
    ```
 
 2. アプリケーションをビルドします：
@@ -87,7 +86,7 @@ APIの動作確認用にテストデータを作成します：
 
 3. Functionsを実行します：
    ```
-   cd MailAnalyzeFunction
+   cd VendorComparisonFunction
    func start
    ```
 
