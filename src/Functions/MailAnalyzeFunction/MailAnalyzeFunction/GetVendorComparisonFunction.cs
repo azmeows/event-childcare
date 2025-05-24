@@ -1,39 +1,39 @@
 using System;
-using System.IO;
+using System.Net;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 using MailAnalyzeFunction.Services;
-using System.Web.Http;
 using MailAnalyzeFunction.Models;
-using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace MailAnalyzeFunction
 {
     public class GetVendorComparisonFunction
     {
         private readonly CosmosDbService _cosmosDbService;
+        private readonly ILogger<GetVendorComparisonFunction> _logger;
 
-        public GetVendorComparisonFunction(CosmosDbService cosmosDbService)
+        public GetVendorComparisonFunction(CosmosDbService cosmosDbService, ILoggerFactory loggerFactory)
         {
             _cosmosDbService = cosmosDbService;
+            _logger = loggerFactory.CreateLogger<GetVendorComparisonFunction>();
         }
 
-        [FunctionName("GetVendorComparison")]
-        public async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "vendor-comparison/{userEmail}")] HttpRequest req,
-            string userEmail,
-            ILogger log)
+        [Function("GetVendorComparison")]
+        public async Task<HttpResponseData> Run(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "vendor-comparison/{userEmail}")] HttpRequestData req,
+            string userEmail)
         {
-            log.LogInformation($"Getting vendor comparison for user: {userEmail}");
+            _logger.LogInformation($"Getting vendor comparison for user: {userEmail}");
 
             if (string.IsNullOrEmpty(userEmail))
             {
-                log.LogWarning("User email is empty");
-                return new BadRequestObjectResult("User email is required");
+                _logger.LogWarning("User email is empty");
+                var badResponse = req.CreateResponse(HttpStatusCode.BadRequest);
+                await badResponse.WriteStringAsync("User email is required");
+                return badResponse;
             }
 
             try
@@ -46,17 +46,23 @@ namespace MailAnalyzeFunction
 
                 if (document == null)
                 {
-                    log.LogWarning($"No document found for user: {sanitizedEmail}");
-                    return new NotFoundObjectResult($"No vendor comparison data found for user: {sanitizedEmail}");
+                    _logger.LogWarning($"No document found for user: {sanitizedEmail}");
+                    var notFoundResponse = req.CreateResponse(HttpStatusCode.NotFound);
+                    await notFoundResponse.WriteStringAsync($"No vendor comparison data found for user: {sanitizedEmail}");
+                    return notFoundResponse;
                 }
 
-                // CORSヘッダーを追加
-                return new OkObjectResult(document);
+                // 正常なレスポンスを返す
+                var response = req.CreateResponse(HttpStatusCode.OK);
+                await response.WriteAsJsonAsync(document);
+                return response;
             }
             catch (Exception ex)
             {
-                log.LogError(ex, $"Error getting vendor comparison data for user: {userEmail}");
-                return new InternalServerErrorResult();
+                _logger.LogError(ex, $"Error getting vendor comparison data for user: {userEmail}");
+                var errorResponse = req.CreateResponse(HttpStatusCode.InternalServerError);
+                await errorResponse.WriteStringAsync("An internal server error occurred");
+                return errorResponse;
             }
         }
 

@@ -30,6 +30,8 @@ jobs:
           app_location: "/src/WebUI/vendor-comparison-ui"
           # API関数の場所を指定
           api_location: "/src/Functions/MailAnalyzeFunction/MailAnalyzeFunction"
+          # API関数のエントリポイントを指定
+          api_build_command: "dotnet build --configuration Release"
           # 出力先を指定
           output_location: "build"
 

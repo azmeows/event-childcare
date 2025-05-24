@@ -19,6 +19,23 @@
             "leaseOptions": {
                 "leasePrefix": "mailanalyze"
             }
+        },
+        "http": {
+            "routePrefix": "api",
+            "cors": {
+                "allowedOrigins": [
+                    "*"
+                ],
+                "allowedMethods": [
+                    "GET",
+                    "POST"
+                ],
+                "allowedHeaders": [
+                    "Content-Type",
+                    "Authorization"
+                ],
+                "maxAge": 3600
+            }
         }
     },
     "functionTimeout": "00:05:00"
